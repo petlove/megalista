@@ -73,11 +73,11 @@ class BigQueryDataSource(BaseDataSource):
         if self._transactional_type == TransactionalType.UUID:
             template = "SELECT data.* FROM `$table_name` AS data \
                             LEFT JOIN $uploaded_table_name AS uploaded USING(uuid) \
-                            WHERE uploaded.uuid IS NULL;"
+                            WHERE SEARCH(IFNULL(uploaded.uuid,'none'), 'none');"
         elif self._transactional_type == TransactionalType.GCLID_TIME:
             template = "SELECT data.* FROM `$table_name` AS data \
                             LEFT JOIN $uploaded_table_name AS uploaded USING(gclid, time) \
-                            WHERE uploaded.gclid IS NULL;"
+                            WHERE SEARCH(IFNULL(uploaded.gclid,'none'), 'none');"
         else:
             raise Exception(f'Unrecognized TransactionalType: {self._transactional_type}. Source="{self._source_name}". Destination="{self._destination_name}"')
 
@@ -94,14 +94,19 @@ class BigQueryDataSource(BaseDataSource):
                             timestamp TIMESTAMP OPTIONS(description= 'Event timestamp'), \
                             uuid STRING OPTIONS(description='Event unique identifier')) \
                             PARTITION BY _PARTITIONDATE \
-                            OPTIONS(partition_expiration_days=15)"
+                            OPTIONS(partition_expiration_days=15); \
+                        CREATE SEARCH INDEX IF NOT EXISTS IDX_UUID \
+                            ON `$uploaded_table_name`(uuid);"    
+                                
         elif self._transactional_type == TransactionalType.GCLID_TIME:
             template = "CREATE TABLE IF NOT EXISTS `$uploaded_table_name` ( \
                             timestamp TIMESTAMP OPTIONS(description= 'Event timestamp'), \
                             gclid STRING OPTIONS(description= 'Original gclid'), \
                             time STRING OPTIONS(description= 'Original time')) \
                             PARTITION BY _PARTITIONDATE \
-                            OPTIONS(partition_expiration_days=15)"
+                            OPTIONS(partition_expiration_days=15); \
+                        CREATE SEARCH INDEX IF NOT EXISTS IDX_GCLID \
+                            ON `$uploaded_table_name`(gclid, time);"  
         else:
             raise Exception(f'Unrecognized TransactionalType: {self._transactional_type}. Source="{self._source_name}". Destination="{self._destination_name}"')
 

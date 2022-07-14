@@ -22,11 +22,12 @@ from models.oauth_credentials import OAuthCredentials
 from uploaders import utils
 from uploaders.google_ads import ADS_API_VERSION
 from uploaders.uploaders import MegalistaUploader
+from typing import Any, List, Dict, Union
 
-_DEFAULT_LOGGER: str = 'megalista.GoogleAdsOfflineConversionsUploader'
+_DEFAULT_LOGGER: str = 'megalista.GoogleAdsOfflineConversionsUploaderCalls'
 
 
-class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
+class GoogleAdsOfflineUploaderCallsDoFn(MegalistaUploader):
 
   def __init__(self, oauth_credentials : OAuthCredentials, developer_token: ValueProvider, error_handler: ErrorHandler):
     super().__init__(error_handler)
@@ -39,8 +40,14 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
                                      self.developer_token.get(),
                                      customer_id)
 
-  def _get_oc_service(self, customer_id):
+  def _get_oc_service(self, customer_id: str):
     return utils.get_ads_service('ConversionUploadService', ADS_API_VERSION,
+                                     self.oauth_credentials,
+                                     self.developer_token.get(),
+                                     customer_id)
+
+  def _get_oc_action_service(self, customer_id: str):
+    return utils.get_ads_service('ConversionActionService', ADS_API_VERSION,
                                      self.oauth_credentials,
                                      self.developer_token.get(),
                                      customer_id)
@@ -56,14 +63,6 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
       return destination.destination_metadata[1].replace('-', '')
     return account_config.google_ads_account_id.replace('-', '')
 
-  def _get_login_customer_id(self, account_config: AccountConfig, destination: Destination) -> str:
-    """
-      If the customer_id in account_config is a mcc, then login with the mcc account id, otherwise use the customer id.
-    """
-    if account_config._mcc:
-        return account_config.google_ads_account_id.replace('-', '')
-    
-    return self._get_customer_id(account_config, destination)
 
   @staticmethod
   def _assert_conversion_name_is_present(execution: Execution):
@@ -83,15 +82,9 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
     self._assert_conversion_name_is_present(execution)
 
     customer_id = self._get_customer_id(execution.account_config, execution.destination)
+    oc_service = self._get_oc_service(customer_id)
     
-    # Retrieves the login-customer-id if mcc enabled
-    login_customer_id = self._get_login_customer_id(execution.account_config, execution.destination)
-    # Initiates OCI service
-    oc_service = self._get_oc_service(login_customer_id)
-    # Initiates ADS service
-    ads_service = self._get_ads_service(login_customer_id)
-    
-    resource_name = self._get_resource_name(ads_service, customer_id, execution.destination.destination_metadata[0])
+    resource_name = self._get_resource_name(customer_id, execution.destination.destination_metadata[0])
 
     response = self._do_upload(oc_service,
                     execution,
@@ -99,17 +92,14 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
                     customer_id,
                     batch.elements)
 
-    batch_with_successful_gclids = self._get_new_batch_with_successfully_uploaded_gclids(batch, response)
-    if len(batch_with_successful_gclids.elements) > 0:
-      return [batch_with_successful_gclids]
-
-  def _do_upload(self, oc_service, execution, conversion_resource_name, customer_id, rows):
-    logging.getLogger(_DEFAULT_LOGGER).info(f'Uploading {len(rows)} offline conversions on {conversion_resource_name} to Google Ads.')
+  def _do_upload(self, oc_service: Any, execution: Execution, conversion_resource_name: str, customer_id: str, rows: List[Dict[str, Union[str, Dict[str, str]]]]):
+    logging.getLogger(_DEFAULT_LOGGER).info(f'Uploading {len(rows)} offline conversions (calls) on {conversion_resource_name} to Google Ads.')
     conversions = [{
           'conversion_action': conversion_resource_name,
+          'caller_id': conversion['caller_id'],
+          'call_start_date_time': utils.format_date(conversion['call_time']),
           'conversion_date_time': utils.format_date(conversion['time']),
-          'conversion_value': int(conversion['amount']),
-          'gclid': conversion['gclid']
+          'conversion_value': int(conversion['amount'])
     } for conversion in rows]
 
     upload_data = {
@@ -119,27 +109,19 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
       'conversions': conversions
     }
 
-    response = oc_service.upload_click_conversions(request=upload_data)
+    response = oc_service.upload_call_conversions(request=upload_data)
 
-    error_message = utils.print_partial_error_messages(_DEFAULT_LOGGER, 'uploading offline conversions', response)
+    error_message = utils.print_partial_error_messages(_DEFAULT_LOGGER, 'uploading offline conversions (calls)', response)
     if error_message:
       self._add_error(execution, error_message)
 
     return response
 
-  def _get_resource_name(self, ads_service, customer_id: str, name: str):
+  def _get_resource_name(self, customer_id: str, name: str):
+      service = self._get_ads_service(customer_id)
       query = f"SELECT conversion_action.resource_name FROM conversion_action WHERE conversion_action.name = '{name}'"
-      response_query = ads_service.search_stream(customer_id=customer_id, query=query)
+      response_query = service.search_stream(customer_id=customer_id, query=query)
       for batch in response_query:
         for row in batch.results:
           return row.conversion_action.resource_name
       raise Exception(f'Conversion "{name}" could not be found on account {customer_id}')
-
-  @staticmethod
-  def _get_new_batch_with_successfully_uploaded_gclids(batch: Batch, response):
-    def gclid_lambda(result): return result.gclid
-
-    successful_gclids = list(map(gclid_lambda, filter(gclid_lambda, response.results)))
-    successful_elements = list(filter(lambda element: element['gclid'] in successful_gclids, batch.elements))
-
-    return Batch(batch.execution, successful_elements)

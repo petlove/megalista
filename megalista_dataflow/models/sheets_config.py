@@ -45,7 +45,20 @@ class SheetsConfig:
     return self._get_sheets_service().spreadsheets().values().get(spreadsheetId=sheet_id, range=range).execute()
 
   def get_value(self, sheet_id, range):
-    range = self.get_range(sheet_id, range)
+    try:
+      range = self.get_range(sheet_id, range)
+    except Exception:
+      return None
     if range.get('values') is None:
       return None
     return range['values'][0][0]
+
+  def check_if_range_exists(self, sheet_id, range):
+      try:
+        self._get_sheets_service().spreadsheets().get(spreadsheetId=sheet_id, range=range).execute()
+      except:
+        return False
+      else:
+        return True
+      finally:
+        pass 

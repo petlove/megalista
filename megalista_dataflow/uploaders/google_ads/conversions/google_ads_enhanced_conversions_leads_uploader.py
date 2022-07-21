@@ -91,7 +91,7 @@ class GoogleAdsECLeadsUploaderDoFn(MegalistaUploader):
         successful_users = [
             user for user in response.results if user.ListFields()]
 
-        logging.info(
+        logging.getLogger(_DEFAULT_LOGGER).info(
             f'Sucessfully uploaded {len(successful_users)} conversions')
 
     def _do_upload(self, oc_service, execution, conversion_resource_name, customer_id, rows):

@@ -25,7 +25,7 @@ class DestinationType(Enum):
         ADS_OFFLINE_CONVERSION_CALLS,
         ADS_SSD_UPLOAD,
         ADS_ENHANCED_CONVERSION,
-        ADS_ENHANCED_CONVERSION_LEADS,  # jraucci
+        ADS_ENHANCED_CONVERSION_LEADS,
         ADS_CUSTOMER_MATCH_CONTACT_INFO_UPLOAD,
         ADS_CUSTOMER_MATCH_MOBILE_DEVICE_ID_UPLOAD,
         ADS_CUSTOMER_MATCH_USER_ID_UPLOAD,
@@ -36,7 +36,7 @@ class DestinationType(Enum):
         GA_4_MEASUREMENT_PROTOCOL,
         DV_CUSTOMER_MATCH_CONTACT_INFO_UPLOAD,
         DV_CUSTOMER_MATCH_DEVICE_ID_UPLOAD,
-    ) = range(15)
+    ) = range(16)
 
     def __eq__(self, other):
         if other is None:
@@ -46,6 +46,7 @@ class DestinationType(Enum):
 
 class SourceType(Enum):
     BIG_QUERY, FILE = range(2)
+
 
 class TransactionalType(Enum):
     """
@@ -60,8 +61,6 @@ class TransactionalType(Enum):
         GCLID_TIME,
     ) = range(3)
 
-
-    
 
 class AccountConfig:
     def __init__(

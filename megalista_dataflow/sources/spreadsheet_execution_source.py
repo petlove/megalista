@@ -99,3 +99,4 @@ class SpreadsheetExecutionSource(BaseBoundedSource):
     else:
       logging.getLogger("megalista.SpreadsheetExecutionSource").warn("No destinations found!")
     return destinations
+  

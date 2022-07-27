@@ -60,8 +60,12 @@ class SpreadsheetExecutionSource(BaseBoundedSource):
 
     sources = self._read_sources(self._sheets_config, sheet_id)
     destinations = self._read_destination(self._sheets_config, sheet_id)
+    
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] sources: {sources}")
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] destinations: {destinations}")
 
     schedules_range = self._sheets_config.get_range(sheet_id, 'SchedulesRange')
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] aqui: {schedules_range}")
     if 'values' in schedules_range:
       for schedule in schedules_range['values']:
         if schedule[0] == 'YES':

@@ -86,6 +86,7 @@ class SpreadsheetExecutionSource(BaseBoundedSource):
   @staticmethod
   def _read_destination(sheets_config, sheet_id):
     range = sheets_config.get_range(sheet_id, 'DestinationsRange')
+    logging.getLogger("megalista.SpreadsheetExecutionSource").warn("[PETLOVE] - sheet_id", sheet_id, "sheets_config", sheets_config)
     destinations = {}
     if 'values' in range:
       for row in range['values']:

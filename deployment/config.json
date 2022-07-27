@@ -1,7 +1,7 @@
 {
     "service_account_name": "megalista-runner",
     "scheduler_name": "megalista-job",
-    "location": "us-central1",
+    "location": "us-east1",
     "bq_ops_dataset": "",
     "bucket_name" : "",
     "developer_token": "",

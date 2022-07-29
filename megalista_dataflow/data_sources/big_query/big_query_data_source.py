@@ -154,6 +154,7 @@ class BigQueryDataSource(BaseDataSource):
         return table_name.replace('`', '')
     
     def _get_schema_fields(self):
+        logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] iniciando schema dataset")
         if self._transactional_type == TransactionalType.UUID:
             return SchemaField("uuid", "string"), SchemaField("timestamp", "timestamp")
         if self._transactional_type == TransactionalType.GCLID_TIME:

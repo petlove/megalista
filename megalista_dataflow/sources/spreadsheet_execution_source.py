@@ -72,15 +72,17 @@ class SpreadsheetExecutionSource(BaseBoundedSource):
           logging.getLogger("megalista.SpreadsheetExecutionSource").info(
             f"Executing step Source:{sources[schedule[1]].source_name} -> Destination:{destinations[schedule[2]].destination_name}")
           yield Execution(account_config, sources[schedule[1]], destinations[schedule[2]])
+      logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"Finish SpreadsheetExecutionSource")
     else:
       logging.getLogger("megalista.SpreadsheetExecutionSource").warn("No schedules found!")
 
   @staticmethod
   def _read_sources(sheets_config, sheet_id):
-    range = sheets_config.get_range(sheet_id, 'SourcesRange')
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info("Init range!")
+    range_sheet = sheets_config.get_range(sheet_id, 'SourcesRange')
     sources = {}
-    if 'values' in range:
-      for row in range['values']:
+    if 'values' in range_sheet:
+      for row in range_sheet['values']:
         source = Source(row[0], SourceType[row[1]], row[2:])
         sources[source.source_name] = source
     else:
@@ -89,11 +91,11 @@ class SpreadsheetExecutionSource(BaseBoundedSource):
 
   @staticmethod
   def _read_destination(sheets_config, sheet_id):
-    range = sheets_config.get_range(sheet_id, 'DestinationsRange')
+    range_sheet = sheets_config.get_range(sheet_id, 'DestinationsRange')
     logging.getLogger("megalista.SpreadsheetExecutionSource").warn("[PETLOVE] - sheet_id", sheet_id, "sheets_config", sheets_config)
     destinations = {}
-    if 'values' in range:
-      for row in range['values']:
+    if 'values' in range_sheet:
+      for row in range_sheet['values']:
         destination = Destination(row[0], DestinationType[row[1]], row[2:])
         destinations[destination.destination_name] = destination
     else:

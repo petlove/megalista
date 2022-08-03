@@ -72,6 +72,7 @@ def safe_process(logger):
                 return
             logger.info(f'Uploading {len(batch.elements)} rows...')
             try:
+                logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] func utils: {func(*args, **kwargs)}")
                 return func(*args, **kwargs)
             except BaseException as e:
                 self_._add_error(batch.execution, f'Error uploading data: {e}')

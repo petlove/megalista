@@ -47,7 +47,7 @@ def format_date(date):
     if isinstance(date, datetime.datetime):
         pdate = date
     else:
-        pdate = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%f')
+        pdate = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S-%f')
 
     pdate = timezone.localize(pdate)
     str_timezone = pdate.strftime("%z")

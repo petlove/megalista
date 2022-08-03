@@ -48,6 +48,8 @@ def format_date(date):
         pdate = date
     else:
         pdate = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%f')
+    
+    logging.getLogger(f'pdate {pdate}')
 
     pdate = timezone.localize(pdate)
     str_timezone = pdate.strftime("%z")
@@ -58,6 +60,7 @@ def get_timestamp_micros(date):
         pdate = date
     else:
         pdate = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%f')
+    logging.getLogger(f'pdate {pdate}')
 
     return math.floor(pdate.timestamp() * 10e5)
     
@@ -125,9 +128,9 @@ def print_partial_error_messages(logger_name, action, response) -> str:
         caller_id = getattr(result, 'caller_id', None)
         if gclid is not None:
             message = f'gclid {result.gclid} uploaded.'
-        elif caller_id is not None:
+        if caller_id is not None:
             message = f'caller_id {result.caller_id} uploaded.'
-        else:
+        if result is not None:
             message = f'item {result} uploaded.'
 
         logging.getLogger(logger_name).debug(message)

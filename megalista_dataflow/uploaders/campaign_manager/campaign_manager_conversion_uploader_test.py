@@ -83,7 +83,7 @@ def test_conversion_upload(mocker, uploader):
     }]), current_time)
 
     # convert 2021-11-30T12:00:00.000 to timestampMicros
-    timestamp_micros = math.floor(datetime.strptime('2021-11-30T12:00:00.000', '%Y-%m-%dT%H:%M:%S.%f').timestamp() * 10e5)
+    timestamp_micros = math.floor(datetime.strptime('2021-11-30T12:00:00.000', '%Y-%m-%dT%H:%M:%S-%f').timestamp() * 10e5)
 
     expected_body = {
         'conversions': [{

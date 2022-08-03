@@ -57,7 +57,7 @@ def get_timestamp_micros(date):
     if isinstance(date, datetime.datetime):
         pdate = date
     else:
-        pdate = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%f')
+        pdate = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S-%f')
 
     return math.floor(pdate.timestamp() * 10e5)
     

@@ -92,6 +92,8 @@ class GoogleAdsOfflineUploaderCallsDoFn(MegalistaUploader):
                     customer_id,
                     batch.elements)
     
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] response: {response}")
+    
     batch_with_successful_gclids = self._get_new_batch_with_successfully_uploaded_gclids(batch, response)
     if len(batch_with_successful_gclids.elements) > 0:
       return [batch_with_successful_gclids]

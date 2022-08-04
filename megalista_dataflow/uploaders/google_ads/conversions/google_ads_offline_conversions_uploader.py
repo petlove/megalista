@@ -98,6 +98,9 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
                     resource_name,
                     customer_id,
                     batch.elements)
+    
+    logging.getLogger(_DEFAULT_LOGGER).info(f'[Petlove] conversions_uploader.resource_name {resource_name}')
+    logging.getLogger(_DEFAULT_LOGGER).info(f'[Petlove] conversions_uploader.response {response}')
 
     batch_with_successful_gclids = self._get_new_batch_with_successfully_uploaded_gclids(batch, response)
     if len(batch_with_successful_gclids.elements) > 0:
@@ -121,6 +124,10 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
 
     response = oc_service.upload_click_conversions(request=upload_data)
 
+    logging.getLogger(_DEFAULT_LOGGER).info(f"[Petlove] google_ads_offline_conversions_uploader._do_upload  upload_data: {upload_data}")
+    logging.getLogger(_DEFAULT_LOGGER).info(f"[Petlove] google_ads_offline_conversions_uploader._do_upload  response: {response}")
+    
+    
     error_message = utils.print_partial_error_messages(_DEFAULT_LOGGER, 'uploading offline conversions', response)
     if error_message:
       self._add_error(execution, error_message)

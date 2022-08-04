@@ -91,6 +91,13 @@ class GoogleAdsOfflineUploaderCallsDoFn(MegalistaUploader):
                     resource_name,
                     customer_id,
                     batch.elements)
+    
+    # [PETLOVE]
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] response: {response}")
+    
+    batch_with_successful_gclids = self._get_new_batch_with_successfully_uploaded_gclids(batch, response)
+    if len(batch_with_successful_gclids.elements) > 0:
+      return [batch_with_successful_gclids]
 
   def _do_upload(self, oc_service: Any, execution: Execution, conversion_resource_name: str, customer_id: str, rows: List[Dict[str, Union[str, Dict[str, str]]]]):
     logging.getLogger(f'[PETLOVE] Rows to upload: {rows}.')

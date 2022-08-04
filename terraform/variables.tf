@@ -58,4 +58,3 @@ variable "region" {
   description = "GCP region https://cloud.google.com/compute/docs/regions-zones?hl=pt-br default us-east1"
 }
 
-

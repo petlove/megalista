@@ -20,7 +20,7 @@ import math
 from models.execution import Batch
 from uploaders.uploaders import MegalistaUploader
 
-MAX_RETRIES = 1
+MAX_RETRIES = 2
 
 timezone = pytz.timezone('America/Sao_Paulo')
 
@@ -97,7 +97,7 @@ def _do_safe_call_api(function, logger, current_retry, *args, **kwargs):
     try:
         return function(*args, *kwargs)
     except Exception as e:
-        if current_retry < MAX_RETRIES:
+        if current_retry <= MAX_RETRIES:
             logger.exception(
                 f'Fail number {current_retry}. Stack track follows. Trying again.')
             current_retry += 1

@@ -20,7 +20,7 @@ import math
 from models.execution import Batch
 from uploaders.uploaders import MegalistaUploader
 
-MAX_RETRIES = 3
+MAX_RETRIES = 1
 
 timezone = pytz.timezone('America/Sao_Paulo')
 
@@ -118,7 +118,12 @@ def print_partial_error_messages(logger_name, action, response) -> str:
     @return: the error_message returned, if there was one, None otherwise.
     """
     error_message = None
-
+    
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.logger_name: {logger_name}")
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.action: {action}")
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.response: {response}")
+    
+    
     partial_failure = getattr(response, 'partial_failure_error', None)
     if partial_failure is not None and partial_failure.message != '':
         error_message = f'Error on {action}: {partial_failure.message}.'

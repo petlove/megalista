@@ -49,7 +49,7 @@ def format_date(date):
     else:
         pdate = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%f')
     
-    logging.getLogger(f'pdate {pdate}')
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.format_date pdate: {pdate}")
 
     pdate = timezone.localize(pdate)
     str_timezone = pdate.strftime("%z")
@@ -60,7 +60,7 @@ def get_timestamp_micros(date):
         pdate = date
     else:
         pdate = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%f')
-    logging.getLogger(f'pdate {pdate}')
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.get_timestamp_micros pdate: {pdate}")
 
     return math.floor(pdate.timestamp() * 10e5)
     
@@ -76,6 +76,7 @@ def safe_process(logger):
             logger.info(f'Uploading {len(batch.elements)} rows...')
             try:
                 logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] func utils: {func(*args, **kwargs)}")
+                logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] func utils: self_:{self_} batch:{batch}")
                 return func(*args, **kwargs)
             except BaseException as e:
                 self_._add_error(batch.execution, f'Error uploading data: {e}')
@@ -106,6 +107,7 @@ def _do_safe_call_api(function, logger, current_retry, *args, **kwargs):
 
 def convert_datetime_tz(dt, origin_tz, destination_tz):
     datetime_obj = pytz.timezone(origin_tz).localize(dt)
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove]  utils.convert_datetime_tz datetime_obj: {datetime_obj}")
     return datetime_obj.astimezone(pytz.timezone(destination_tz))
 
 
@@ -125,10 +127,13 @@ def print_partial_error_messages(logger_name, action, response) -> str:
     
     
     partial_failure = getattr(response, 'partial_failure_error', None)
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.print_partial_error_messages partial_failure: {partial_failure}")
     if partial_failure is not None and partial_failure.message != '':
         error_message = f'Error on {action}: {partial_failure.message}.'
+        logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.print_partial_error_messages: {logger_name}")
         logging.getLogger(logger_name).error(error_message)
     results = getattr(response, 'results', [])
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.print_partial_error_messages results: {results}")
     for result in results:
         gclid = getattr(result, 'gclid', None)
         caller_id = getattr(result, 'caller_id', None)

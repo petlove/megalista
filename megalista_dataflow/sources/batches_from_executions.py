@@ -53,6 +53,7 @@ class ExecutionCoder(coders.Coder):
         return True
 
 class BatchesFromExecutions(beam.PTransform):
+
     """
     Filter the received executions by the received action,
     load the data using the received source and group by that batch size and Execution.
@@ -63,12 +64,15 @@ class BatchesFromExecutions(beam.PTransform):
             super().__init__(error_handler)
             self._transactional_type = transactional_type
             self._dataflow_options = dataflow_options
+            logging.getLogger('megalista.BatchesFromExecutions._ReadDataSource').info(f'[Petlove] - batches_from_executions._ReadDataSource transactional_type: {transactional_type}; dataflow_options:{dataflow_options}')
 
         def process(self, execution: Execution) -> Iterable[Tuple[Execution, Dict[str, Any]]]:
+            logging.getLogger(_LOGGER_NAME).info(f'[Petlove] - batches_from_executions.process primeira parte')
             data_source = DataSource.get_data_source(
                 execution.source.source_type, execution.source.source_name,
                 execution.destination.destination_type, execution.destination.destination_name,
                 self._transactional_type, self._dataflow_options)
+            logging.getLogger(_LOGGER_NAME).info(f'[Petlove] - batches_from_executions.process {data_source}')
             return data_source.retrieve_data(execution)
 
     class _BatchElements(MegalistaUploader):

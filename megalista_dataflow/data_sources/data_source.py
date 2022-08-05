@@ -20,6 +20,7 @@ from data_sources.file.file_data_source import FileDataSource
 from models.execution import TransactionalType
 
 import importlib
+import logging
 
 _LOGGER_NAME = 'megalista.data_sources.DataSource'
 
@@ -33,8 +34,10 @@ class DataSource:
                 bq_ops_dataset = dataflow_options.bq_ops_dataset.get()
             if dataflow_options.bq_location:
                 bq_location = dataflow_options.bq_location.get()
+                logging.getLogger("megalista.data_sources.DataSource").info(f"[Petlove] bq_location: {bq_location}")   
             return BigQueryDataSource(transactional_type, bq_ops_dataset, bq_location, source_type, source_name, destination_type, destination_name)
         elif source_type == SourceType.FILE:
+            logging.getLogger("megalista.data_sources.DataSource").info(f"[Petlove] source_type: {source_type}")
             return FileDataSource(transactional_type, dataflow_options, source_type, source_name, destination_type, destination_name)
         else:
             raise NotImplementedError("Source Type not implemented. Please check your configuration (sheet / json / firestore).")

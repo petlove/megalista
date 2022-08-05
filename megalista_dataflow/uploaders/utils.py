@@ -53,7 +53,7 @@ def format_date(date):
 
     pdate = timezone.localize(pdate)
     str_timezone = pdate.strftime("%z")
-    return f'{datetime.datetime.strftime(pdate, "%Y-%m-%d %H:%M:%S")}{str_timezone[-5:-2]}:{str_timezone[-2:]}'
+    return f'{datetime.datetime.strftime(pdate, "%Y-%m-%dT%H:%M:%S-0300")}' #petlove alterado
 
 def get_timestamp_micros(date):
     if isinstance(date, datetime.datetime):
@@ -127,7 +127,7 @@ def print_partial_error_messages(logger_name, action, response) -> str:
     
     
     partial_failure = getattr(response, 'partial_failure_error', None)
-    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.print_partial_error_messages partial_failure: {partial_failure}")
+    logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.print_partial_error_messages results: {partial_failure}")
     if partial_failure is not None and partial_failure.message != '':
         error_message = f'Error on {action}: {partial_failure.message}.'
         logging.getLogger("megalista.SpreadsheetExecutionSource").info(f"[Petlove] util.print_partial_error_messages: {logger_name}")

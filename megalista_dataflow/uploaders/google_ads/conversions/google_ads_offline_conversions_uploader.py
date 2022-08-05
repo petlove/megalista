@@ -142,6 +142,7 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
       response_query = ads_service.search_stream(customer_id=customer_id, query=query)
       for batch in response_query:
         for row in batch.results:
+          logging.getLogger(_DEFAULT_LOGGER).info(f"[Petlove] google_ads_offline_conversions_uploader._get_resource_name row.conversion_action.resource_name {row.conversion_action.resource_name}")
           return row.conversion_action.resource_name
       raise Exception(f'Conversion "{name}" could not be found on account {customer_id}')
 

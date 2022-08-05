@@ -79,7 +79,7 @@ class AppsFlyerS2SUploaderDoFn(MegalistaUploader):
       async with session.post(url, headers=headers, json=payload,
       raise_for_status=False, timeout=15) as response:
         if response.status != 200:
-          if curr_retry < 3:
+          if curr_retry < 2:
             await asyncio.sleep(curr_retry)
             return await self._send_http_request(session, payload, curr_retry+1)
           else:
@@ -90,7 +90,7 @@ class AppsFlyerS2SUploaderDoFn(MegalistaUploader):
         return response.status
 
     except Exception as exc:
-      if curr_retry < 3:
+      if curr_retry < 2:
         await asyncio.sleep(curr_retry)
         return await self._send_http_request(session, payload, curr_retry+1)
       else:

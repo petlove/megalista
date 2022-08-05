@@ -135,6 +135,7 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
     return response
 
   def _get_resource_name(self, ads_service, customer_id: str, name: str):
+      logging.getLogger(_DEFAULT_LOGGER).info(f"[Petlove] google_ads_offline_conversions_uploader._get_resource_name")
       query = f"SELECT conversion_action.resource_name FROM conversion_action WHERE conversion_action.name = '{name}'"
       response_query = ads_service.search_stream(customer_id=customer_id, query=query)
       for batch in response_query:

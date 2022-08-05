@@ -151,7 +151,9 @@ class GoogleAdsSSDUploaderDoFn(MegalistaUploader):
         logging.getLogger('megalista.GoogleAdsSSDUploader').info(f"[Petlove] google_ads_ssd_uploader._get_resource_name")
         service = self._get_ads_service(login_customer_id)
         query = f"SELECT conversion_action.resource_name FROM conversion_action WHERE conversion_action.name = '{name}'"
+        logging.getLogger('megalista.GoogleAdsSSDUploader').info(f"[Petlove] google_ads_ssd_uploader._get_resource_name query {query}")
         response_query = service.search_stream(customer_id=customer_id, query=query)
+        logging.getLogger('megalista.GoogleAdsSSDUploader').info(f"[Petlove] google_ads_ssd_uploader._get_resource_name response_query response_query {response_query}")
         for batch in response_query:
           for row in batch.results:
             resource_name = row.conversion_action.resource_name

@@ -108,10 +108,11 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
 
   def _do_upload(self, oc_service, execution, conversion_resource_name, customer_id, rows):
     logging.getLogger(_DEFAULT_LOGGER).info(f'Uploading {len(rows)} offline conversions on {conversion_resource_name} to Google Ads.')
+    logging.getLogger(_DEFAULT_LOGGER).info(f'Uploading {len(rows)} conversion[amount] antes de rows {rows} ')
     conversions = [{
           'conversion_action': conversion_resource_name,
           'conversion_date_time': utils.format_date(conversion['time']),
-          'conversion_value': int(float(conversion['amount'])),
+          'conversion_value': float(conversion['amount']),
           'gclid': conversion['gclid']
     } for conversion in rows]
 
@@ -121,6 +122,8 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
       'validate_only': False,
       'conversions': conversions
     }
+    
+    
 
     response = oc_service.upload_click_conversions(request=upload_data)
 

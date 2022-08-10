@@ -144,7 +144,10 @@ class BigQueryDataSource(BaseDataSource):
             results = client.insert_rows(table,
                 self._get_bq_rows(rows, now),
                 self._get_schema_fields())
-
+            
+            logging.getLogger(_LOGGER_NAME).info(
+                f"[Petlove] Rows inserted: {rows}")
+            
             for result in results:
                 logging.getLogger(_LOGGER_NAME).error(result['errors'])
     

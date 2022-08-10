@@ -17,7 +17,7 @@ from models.options import DataflowOptions
 from data_sources.base_data_source import BaseDataSource
 from data_sources.big_query.big_query_data_source import BigQueryDataSource
 from data_sources.file.file_data_source import FileDataSource
-from models.execution import TransactionalType
+from models.execution import TransactionalType, ExecutionsGroupedBySource
 
 import importlib
 import logging
@@ -25,20 +25,22 @@ import logging
 _LOGGER_NAME = 'megalista.data_sources.DataSource'
 
 class DataSource:
-    def get_data_source(source_type: SourceType, source_name: str, destination_type: DestinationType, destination_name: str, transactional_type: TransactionalType, dataflow_options: DataflowOptions) -> BaseDataSource:
+    @staticmethod
+    def get_data_source(executions: ExecutionsGroupedBySource, transactional_type: TransactionalType, dataflow_options: DataflowOptions) -> BaseDataSource:
         data_source = None
+        source_type = executions.source.source_type
         if source_type == SourceType.BIG_QUERY:
-            bq_ops_dataset = None
+            bq_ops_dataset = ''
             bq_location = None
             if dataflow_options.bq_ops_dataset:
                 bq_ops_dataset = dataflow_options.bq_ops_dataset.get()
             if dataflow_options.bq_location:
                 bq_location = dataflow_options.bq_location.get()
                 logging.getLogger("megalista.data_sources.DataSource").info(f"[Petlove] bq_location: {bq_location}")   
-            return BigQueryDataSource(transactional_type, bq_ops_dataset, bq_location, source_type, source_name, destination_type, destination_name)
+            return BigQueryDataSource(executions, transactional_type, bq_ops_dataset, bq_location)
         elif source_type == SourceType.FILE:
             logging.getLogger("megalista.data_sources.DataSource").info(f"[Petlove] source_type: {source_type}")
-            return FileDataSource(transactional_type, dataflow_options, source_type, source_name, destination_type, destination_name)
+            return FileDataSource(executions, transactional_type, dataflow_options)
         else:
             raise NotImplementedError("Source Type not implemented. Please check your configuration (sheet / json / firestore).")
         return data_source

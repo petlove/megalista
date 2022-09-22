@@ -122,7 +122,9 @@ class GoogleAdsSSDUploaderDoFn(MegalistaUploader):
           If the currency_code is present on the destination, return it, otherwise default to BRL.
         """
         if len(destination.destination_metadata) >= 5 and len(destination.destination_metadata[3]) > 0:
+            logging.getLogger('megalista.GoogleAdsSSDUploader; Código do País;', destination.destination_metadata[3])
             return destination.destination_metadata[3]
+        logging.getLogger('megalista.GoogleAdsSSDUploader; Código do País BRL')
         return 'BRL'
 
     def _get_customer_id(self, account_config: AccountConfig, destination: Destination) -> str:

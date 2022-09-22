@@ -80,8 +80,10 @@ class AppsFlyerS2SUploaderDoFn(MegalistaUploader):
       raise_for_status=False, timeout=15) as response:
         if response.status != 200:
           if curr_retry < 3:
-            await asyncio.sleep(curr_retry)
-            return await self._send_http_request(session, payload, curr_retry+1)
+            logging.getLogger("megalista.AppsFlyerS2SUploader - Tentativa de retry").error(
+              f"reason: {response.reason}")
+            # await asyncio.sleep(curr_retry)
+            # return await self._send_http_request(session, payload, curr_retry+1)
           else:
             logging.getLogger("megalista.AppsFlyerS2SUploader").error(
               f"Fail to send event. Response code: {response.status}, "
@@ -91,8 +93,10 @@ class AppsFlyerS2SUploaderDoFn(MegalistaUploader):
 
     except Exception as exc:
       if curr_retry < 3:
-        await asyncio.sleep(curr_retry)
-        return await self._send_http_request(session, payload, curr_retry+1)
+        logging.getLogger("megalista.AppsFlyerS2SUploader - Tentativa de retry2").error(
+              f"reason: {response.reason}")
+        # await asyncio.sleep(curr_retry)
+        # return await self._send_http_request(session, payload, curr_retry+1)
       else:
         logging.getLogger("megalista.AppsFlyerS2SUploader").error('Error inserting event: ' + str(exc))
         return -1

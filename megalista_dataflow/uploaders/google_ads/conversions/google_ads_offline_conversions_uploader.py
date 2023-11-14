@@ -185,9 +185,9 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
     for row in rows:
     
       # Petlove
-      logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] conversion time: {conversion["time"]}')
+      logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] conversion time: {row["time"]}')
       
-      logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] start_date: {start_date}, date: {datetime.strptime(conversion["time"], "%Y-%m-%dT%H:%M:%S.%f")}, stop_date: {stop_date}')
+      logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] start_date: {start_date}, date: {datetime.strptime(row["time"], "%Y-%m-%dT%H:%M:%S.%f")}, stop_date: {stop_date}')
       
       if start_date <= datetime.strptime(row['time'], '%Y-%m-%dT%H:%M:%S.%f') <= stop_date:
         # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE] The conversion is in time range. Conversion date: {datetime.strptime(conversion["time"], "%Y-%m-%dT%H:%M:%S.%f")}, start_date: {start_date}, stop_date: {stop_date}')
@@ -203,7 +203,6 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
             'external_attribution_model': row['external_attribution_model']
           }
         
-        logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] conversion_data: {conversion_data}')
         
         conversions.append(conversion)
         

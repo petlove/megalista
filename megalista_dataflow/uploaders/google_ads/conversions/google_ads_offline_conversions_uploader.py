@@ -39,20 +39,20 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
     self.developer_token = developer_token
 
   def _get_ads_service(self, customer_id: str):
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] ADS_API_VERSION: {ADS_API_VERSION}')
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] self.oauth_credentials: {self.oauth_credentials}')
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] self.developer_token.get(): {self.developer_token.get()}')
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] customer_id: {customer_id}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] ADS_API_VERSION: {ADS_API_VERSION}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] self.oauth_credentials: {self.oauth_credentials}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] self.developer_token.get(): {self.developer_token.get()}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] customer_id: {customer_id}')
     return utils.get_ads_service('GoogleAdsService', ADS_API_VERSION,
                                      self.oauth_credentials,
                                      self.developer_token.get(),
                                      customer_id)
 
   def _get_oc_service(self, customer_id):
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] ADS_API_VERSION: {ADS_API_VERSION}')
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] self.oauth_credentials: {self.oauth_credentials}')
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] self.developer_token.get(): {self.developer_token.get()}')
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] customer_id: {customer_id}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] ADS_API_VERSION: {ADS_API_VERSION}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] self.oauth_credentials: {self.oauth_credentials}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] self.developer_token.get(): {self.developer_token.get()}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] customer_id: {customer_id}')
     return utils.get_ads_service('ConversionUploadService', ADS_API_VERSION,
                                      self.oauth_credentials,
                                      self.developer_token.get(),
@@ -123,8 +123,8 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
     
     self._assert_conversion_name_is_present(execution)
     
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] execution.account_config: {execution.account_config}')
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] execution.destination: {execution.destination}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] execution.account_config: {execution.account_config}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] execution.destination: {execution.destination}')
 
     customer_id = self._get_customer_id(execution.account_config, execution.destination)
     
@@ -136,7 +136,7 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
     ads_service = self._get_ads_service(login_customer_id)
     
     
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] execution.destination.destination_metadata: {execution.destination.destination_metadata}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] execution.destination.destination_metadata: {execution.destination.destination_metadata}')
 
     resource_name = self._get_resource_name(ads_service, customer_id, execution.destination.destination_metadata[0])
     
@@ -157,11 +157,11 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
                     customer_id,
                     batch.elements, start_date, stop_date)
 
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] response: {response}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] response: {response}')
     
     batch_with_successful_gclids = self._get_new_batch_with_successfully_uploaded_gclids(batch, response)
     
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] batch_with_successful_gclids: {batch_with_successful_gclids}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] batch_with_successful_gclids: {batch_with_successful_gclids}')
     
     if len(batch_with_successful_gclids.elements) > 0:
       return [batch_with_successful_gclids]
@@ -178,16 +178,16 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
     # } for conversion in rows]
 
     # Petlove
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] total rows: {len(rows)}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] total rows: {len(rows)}')
     
     conversions = []
     
     for row in rows:
     
       # Petlove
-      # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] conversion time: {conversion["time"]}')
+      logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] conversion time: {conversion["time"]}')
       
-      # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] start_date: {start_date}, date: {datetime.strptime(conversion["time"], "%Y-%m-%dT%H:%M:%S.%f")}, stop_date: {stop_date}')
+      logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] start_date: {start_date}, date: {datetime.strptime(conversion["time"], "%Y-%m-%dT%H:%M:%S.%f")}, stop_date: {stop_date}')
       
       if start_date <= datetime.strptime(row['time'], '%Y-%m-%dT%H:%M:%S.%f') <= stop_date:
         # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE] The conversion is in time range. Conversion date: {datetime.strptime(conversion["time"], "%Y-%m-%dT%H:%M:%S.%f")}, start_date: {start_date}, stop_date: {stop_date}')
@@ -203,16 +203,16 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
             'external_attribution_model': row['external_attribution_model']
           }
         
-        # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] conversion_data: {conversion_data}')
+        logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] conversion_data: {conversion_data}')
         
         conversions.append(conversion)
         
       # else:
-      #   logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] The conversion is NOT in time range. Conversion date: {datetime.strptime(conversion["time"], "%Y-%m-%dT%H:%M:%S.%f")}, start_date: {start_date}, stop_date: {stop_date}')
+        logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] The conversion is NOT in time range. Conversion date: {datetime.strptime(conversion["time"], "%Y-%m-%dT%H:%M:%S.%f")}, start_date: {start_date}, stop_date: {stop_date}')
   
     
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] total conversions: {len(conversions)}')
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] conversions: {conversions}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] total conversions: {len(conversions)}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] conversions: {conversions}')
     
     
     upload_data = {
@@ -222,19 +222,19 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
       'conversions': conversions
     }
     
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] customer_id: {customer_id}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] customer_id: {customer_id}')
 
-    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] upload_data: {upload_data}')
+    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] upload_data: {upload_data}')
     
     response = oc_service.upload_click_conversions(request=upload_data)
     
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] response: {response}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] response: {response}')
     
 
     error_message = utils.print_partial_error_messages(_DEFAULT_LOGGER, 'uploading offline conversions', response)
     if error_message:
       self._add_error(execution, error_message)
-      logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] error_message: {error_message}')
+      # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] error_message: {error_message}')
 
     return response
 
@@ -249,16 +249,16 @@ class GoogleAdsOfflineUploaderDoFn(MegalistaUploader):
   @staticmethod
   def _get_new_batch_with_successfully_uploaded_gclids(batch: Batch, response):
     def gclid_lambda(result): 
-        logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] error_message: {result.gclid}')
+        # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] error_message: {result.gclid}')
         return result.gclid
     
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] response: {response}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] response: {response}')
     
     successful_gclids = list(map(gclid_lambda, filter(gclid_lambda, response.results)))
     successful_elements = list(filter(lambda element: element['gclid'] in successful_gclids, batch.elements))
     
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] successful_gclids: {successful_gclids}')
-    logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] successful_elements: {successful_elements}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] successful_gclids: {successful_gclids}')
+    # logging.getLogger(_DEFAULT_LOGGER).info(f'[PETLOVE][ADS OFF CONV] successful_elements: {successful_elements}')
     
 
     return Batch(batch.execution, successful_elements)

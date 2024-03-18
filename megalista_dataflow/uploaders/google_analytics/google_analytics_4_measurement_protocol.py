@@ -251,8 +251,8 @@ class GoogleAnalytics4MeasurementProtocolUploaderDoFn(MegalistaUploader):
       url = ''.join(url_container)
         
       #Petlove
-      # logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader').info(
-      # f'[PETLOVE] Payload created:\n {json.dumps(payload)}')
+      logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader').info(
+      f'[PETLOVE] Payload created:\n {json.dumps(payload)}')
         
       #debug_response = requests.post(''.join(url_debug_container),data=json.dumps(payload))
 

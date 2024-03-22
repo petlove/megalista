@@ -172,8 +172,7 @@ class GoogleAnalytics4MeasurementProtocolUploaderDoFn(MegalistaUploader):
       client_id = row.get('client_id')
       user_id = row.get('user_id')
       timestamp_micros = row.get('timestamp_micros')
-        
-
+      
       payload: Dict[str, Any] = {
         'nonPersonalizedAds': non_personalized_ads
       }
@@ -191,12 +190,22 @@ class GoogleAnalytics4MeasurementProtocolUploaderDoFn(MegalistaUploader):
         # payload['events'] = [{'name': row['name'], 'params': params}]
           
         # Petlove
+        event_params = {}
         for k, v in row.items():
+          #Petlove - teste vsc
+          # logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader'). \
+          #   info(f'[PETLOVE] k,v:\n {k}, {v}')
+          
           if self._validate_param(k, v, event_reserved_keys) and "event_" in k:
-            event_params = {
+            event_params.update({
                 k.replace("event_", ""): v
-            }
-            event_params.update({'currency': 'BRL'})
+            })
+            
+            
+        event_params.update({'currency': 'BRL'})
+        #Petlove - teste vsc
+        # logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader'). \
+        # info(f'[PETLOVE] event_params:\n {event_params}')
           
         # payload["events"] = {"name": row["name"], "params": event_params}
         payload["events"] = {"name": conversion_name, "params": event_params}
@@ -251,8 +260,7 @@ class GoogleAnalytics4MeasurementProtocolUploaderDoFn(MegalistaUploader):
       url = ''.join(url_container)
         
       #Petlove
-      logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader').info(
-      f'[PETLOVE] Payload created:\n {json.dumps(payload)}')
+      logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader').info(f'[PETLOVE] Payload created:\n {json.dumps(payload)}')
         
       #debug_response = requests.post(''.join(url_debug_container),data=json.dumps(payload))
 

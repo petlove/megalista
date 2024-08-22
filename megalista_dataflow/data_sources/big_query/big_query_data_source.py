@@ -91,6 +91,8 @@ class BigQueryDataSource(BaseDataSource):
             conversion_name = executions.destinations[0].destination_metadata[5]
         if 'ADS_OFFLINE_CONVERSION' in str(self._destination_type) and len(executions.destinations[0].destination_metadata[0]) >= 1:
             conversion_name = executions.destinations[0].destination_metadata[0]
+        if 'ADS_ENHANCED_CONVERSION_LEADS' in str(self._destination_type) and len(executions.destinations[0].destination_metadata[5]) >= 3:
+            conversion_name = executions.destinations[0].destination_metadata[5]    
                         
         # logging.getLogger(_LOGGER_NAME).info(f'[PETLOVE] CONVERSION NAME: {conversion_name}')
         

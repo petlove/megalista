@@ -27,7 +27,7 @@ setuptools.setup(
                       'google-cloud-storage==2.13.0',
                       'google-cloud-firestore==2.4.0',
                       'protobuf==3.20.3',
-                      'pandas==2.1.2', 
+                      'pandas==1.5.3', 
                       'boto3==1.28.78',
                       'tadau'],
     packages=setuptools.find_packages(),

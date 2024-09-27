@@ -37,7 +37,7 @@ from uploaders.google_ads.conversions.google_ads_offline_conversion_adjustments_
 from uploaders.google_ads.conversions.google_ads_offline_conversion_adjustments_uploader_order_id import (
     GoogleAdsOfflineAdjustmentOrderIdUploaderDoFn,
 )
-from uploaders.google_ads.conversions.google_ads_enhanced_conversions_leads_uploader import (
+from megalista_dataflow.uploaders.google_ads.conversions.google_ads_enhanced_conversions_leads_uploader_petlove_test import (
     GoogleAdsECLeadsUploaderDoFn,
 )
 from uploaders.google_ads.conversions.google_ads_ssd_uploader import (

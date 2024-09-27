@@ -12,4 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ADS_API_VERSION = 'v15'
+ADS_API_VERSION = 'v17'
+

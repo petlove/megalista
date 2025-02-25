@@ -92,7 +92,7 @@ class GoogleAnalytics4MeasurementProtocolUploaderDoFn(MegalistaUploader):
     if len(execution.destination.destination_metadata) >= 6:
       #measurement_id = execution.destination.destination_metadata[5]
  
-      #logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader').info(f"[PETLOVE] execution.destination.destination_metadata: {execution.destination.destination_metadata}")
+      logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader').info(f"[PETLOVE] execution.destination.destination_metadata: {execution.destination.destination_metadata}")
       conversion_name = execution.destination.destination_metadata[5]
 
   # Calcula o start_date que será passado para consultar a tabela 
@@ -251,8 +251,8 @@ class GoogleAnalytics4MeasurementProtocolUploaderDoFn(MegalistaUploader):
       url = ''.join(url_container)
         
       #Petlove
-      # logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader').info(
-      # f'[PETLOVE] Payload created:\n {json.dumps(payload)}')
+      logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader').info(
+        f'[PETLOVE] Payload created:\n {json.dumps(payload)}')
         
       #debug_response = requests.post(''.join(url_debug_container),data=json.dumps(payload))
 

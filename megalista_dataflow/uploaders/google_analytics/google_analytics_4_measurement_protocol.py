@@ -192,6 +192,8 @@ class GoogleAnalytics4MeasurementProtocolUploaderDoFn(MegalistaUploader):
           
         # Petlove
         for k, v in row.items():
+          logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader'
+                            ).info(f'[PETLOVE] k: {k} - v: {v}')
           if self._validate_param(k, v, event_reserved_keys) and "event_" in k:
             event_params = {
                 k.replace("event_", ""): v

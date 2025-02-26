@@ -193,8 +193,8 @@ class GoogleAnalytics4MeasurementProtocolUploaderDoFn(MegalistaUploader):
         # Petlove
         event_params = {}
         for k, v in row.items():
-          logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader'
-                            ).info(f'[PETLOVE] k: {k} - v: {v}')
+          # logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader'
+          #                   ).info(f'[PETLOVE] k: {k} - v: {v}')
           if self._validate_param(k, v, event_reserved_keys) and "event_" in k:
             event_params.update({
                 k.replace("event_", ""): v
@@ -203,8 +203,8 @@ class GoogleAnalytics4MeasurementProtocolUploaderDoFn(MegalistaUploader):
         # teste estava com um tab pra frente 
         event_params.update({'currency': 'BRL'})
 
-        logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader'
-                            ).info(f'[PETLOVE] event_params: {event_params}')
+        # logging.getLogger('megalista.GoogleAnalytics4MeasurementProtocolUploader'
+        #                     ).info(f'[PETLOVE] event_params: {event_params}')
           
         # payload["events"] = {"name": row["name"], "params": event_params}
         payload["events"] = {"name": conversion_name, "params": event_params}

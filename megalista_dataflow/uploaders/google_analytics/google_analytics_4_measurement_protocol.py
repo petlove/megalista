@@ -199,7 +199,7 @@ class GoogleAnalytics4MeasurementProtocolUploaderDoFn(MegalistaUploader):
                 k.replace("event_", ""): v
             }
         
-        event_params.update({'currency': 'BRL'})
+        # event_params.update({'currency': 'BRL'})
           
         # payload["events"] = {"name": row["name"], "params": event_params}
         payload["events"] = {"name": conversion_name, "params": event_params}

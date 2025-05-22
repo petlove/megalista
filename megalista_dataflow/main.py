@@ -131,14 +131,17 @@ def run(argv=None):
         executions = pipeline | "Load executions" >> LoadExecutionsStep(
             params, execution_source
         )
+        print(f"\nTESTE - PASSOU passou executions")
 
         processing_results = executions | "Execute integrations" >> ProcessingStep(
             params
         )
+        print(f"\nTESTE - PASSOU passou processing_results")
 
         # todo: update trix at the end
 
         tuple(processing_results) | "Consolidate results" >> LastStep(params)
+        print(f"\nTESTE - PASSOU passou tupla")
 
 
 if __name__ == "__main__":

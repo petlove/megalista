@@ -76,8 +76,16 @@ def run(argv=None):
         dataflow_options.refresh_token,
     )
 
+    print(f"\nTESTE - PASSOU OAUTH")
+
     sheets_config = SheetsConfig(oauth_credentials)
+
+    print(f"\nTESTE - PASSOU sheets_config")
+
     json_config = JsonConfig(dataflow_options)
+
+    print(f"\nTESTE - PASSOU json_config")
+
     execution_source = PrimaryExecutionSource(
         sheets_config,
         json_config,
@@ -86,20 +94,29 @@ def run(argv=None):
         dataflow_options.setup_firestore_collection,
         dataflow_options.show_code_lines_in_log,
     )
+    print(f"\nTESTE - PASSOU execution_source")
+
     error_notifier = GmailNotifier(
         dataflow_options.notify_errors_by_email,
         oauth_credentials,
         dataflow_options.errors_destination_emails,
     )
+
+    print(f"\nTESTE - PASSOU error_notifier")
     params = MegalistaStepParams(oauth_credentials, dataflow_options, error_notifier)
 
+    print(f"\nTESTE - PASSOU params")
+
     coders.registry.register_coder(Execution, ExecutionCoder)
+    print(f"\nTESTE - PASSOU execution_coder")
     coders.registry.register_coder(
         ExecutionsGroupedBySource, ExecutionsGroupedBySourceCoder
     )
+    print(f"\nTESTE - PASSOU executions_grouped_by_source_coder")
     coders.registry.register_coder(
         DataRowsGroupedBySource, DataRowsGroupedBySourceCoder
     )
+    print(f"\nTESTE - PASSOU passou data_rows_grouped_by_source_coder")
     # PETLOVE
     # logging_handler = LoggingConfig.get_logging_handler() # n sei se precisa    
     #logging.getLogger("megalista").info(f"[PETLOVE] executando funcao def run(argv=None)")

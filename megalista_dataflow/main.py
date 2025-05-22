@@ -62,12 +62,12 @@ def run(argv=None):
     # logging.getLogger("megalista").info(f"[PETLOVE] dataflow_options.access_token: {dataflow_options.access_token}")
     # logging.getLogger("megalista").info(f"[PETLOVE] dataflow_options.refresh_token: {dataflow_options.refresh_token}")
 
-    print(f"[PETLOVE] pipeline_options: {pipeline_options}")
-    print(f"[PETLOVE] dataflow_options: {dataflow_options}")
-    print(f"[PETLOVE] dataflow_options.client_id: {dataflow_options.client_id}")
-    print(f"[PETLOVE] dataflow_options.client_secret: {dataflow_options.client_secret}")
-    print(f"[PETLOVE] dataflow_options.access_token: {dataflow_options.access_token}")
-    print(f"[PETLOVE] dataflow_options.refresh_token: {dataflow_options.refresh_token}")
+    # print(f"[PETLOVE] pipeline_options: {pipeline_options}")
+    # print(f"[PETLOVE] dataflow_options: {dataflow_options}")
+    # print(f"[PETLOVE] dataflow_options.client_id: {dataflow_options.client_id}")
+    # print(f"[PETLOVE] dataflow_options.client_secret: {dataflow_options.client_secret}")
+    # print(f"[PETLOVE] dataflow_options.access_token: {dataflow_options.access_token}")
+    # print(f"[PETLOVE] dataflow_options.refresh_token: {dataflow_options.refresh_token}")
 
     oauth_credentials = OAuthCredentials(
         dataflow_options.client_id,

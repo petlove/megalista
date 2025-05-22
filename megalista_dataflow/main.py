@@ -147,22 +147,22 @@ def run(argv=None):
 if __name__ == "__main__":
     run()
 
-    logging_handler = LoggingConfig.get_logging_handler()
-    if logging_handler is None:
-        logging.getLogger("megalista").info(
-            f"MEGALISTA build {MEGALISTA_VERSION}: Clould not find error interception handler. Skipping error intereception."
-        )
-        print(f"\nTESTE - PASSOU primeiro if")
-    else:
-        if logging_handler.has_errors:
-            logging.getLogger("megalista").critical(
-                f"MEGALISTA build {MEGALISTA_VERSION}: Completed with errors"
-            )
-            print(f"\nTESTE - PASSOU segundo if")
-            raise SystemExit(1)
-        else:
-            logging.getLogger("megalista").info(
-                f"MEGALISTA build {MEGALISTA_VERSION}: Completed successfully!"
-            )
-            print(f"\nTESTE - PASSOU else")
+    # logging_handler = LoggingConfig.get_logging_handler()
+    # if logging_handler is None:
+    #     logging.getLogger("megalista").info(
+    #         f"MEGALISTA build {MEGALISTA_VERSION}: Clould not find error interception handler. Skipping error intereception."
+    #     )
+    #     print(f"\nTESTE - PASSOU primeiro if")
+    # else:
+    #     if logging_handler.has_errors:
+    #         logging.getLogger("megalista").critical(
+    #             f"MEGALISTA build {MEGALISTA_VERSION}: Completed with errors"
+    #         )
+    #         print(f"\nTESTE - PASSOU segundo if")
+    #         raise SystemExit(1)
+    #     else:
+    #         logging.getLogger("megalista").info(
+    #             f"MEGALISTA build {MEGALISTA_VERSION}: Completed successfully!"
+    #         )
+    #         print(f"\nTESTE - PASSOU else")
     exit(0)

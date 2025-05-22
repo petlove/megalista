@@ -651,7 +651,7 @@ PROCESSING_STEPS = [
     # ["GA 360 User List", GoogleAnalyticsUserListStep],
     # ["GA 360 Data Import", GoogleAnalyticsDataImportStep],
     # ["GA 360 MP", GoogleAnalyticsMeasurementProtocolStep],
-    ["GA4 MP", GoogleAnalytics4MeasurementProtocolStep],
+    ["GA4 MP", GoogleAnalytics4MeasurementProtocolStep]
     # ["CM OCI", CampaignManagerConversionStep],
     # ["DV360 Audiences Device", DisplayVideoCustomerMatchDeviceIdStep],
     # ["DV360 Audiences Contact", DisplayVideoCustomerMatchContactInfoStep],
